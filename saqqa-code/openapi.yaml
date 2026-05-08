@@ -1,0 +1,1019 @@
+openapi: 3.1.0
+info:
+  title: Api
+  version: 0.2.0
+  description: PoliCity + Saqqa Search API
+servers:
+  - url: /api
+    description: Base API path
+tags:
+  - name: health
+    description: Health operations
+  - name: player
+    description: Player profile and progression
+  - name: city
+    description: City management
+  - name: policies
+    description: Public policy management
+  - name: economy
+    description: Economic management
+  - name: international
+    description: International relations
+  - name: subscription
+    description: Subscription and premium features
+  - name: search
+    description: Saqqa Search price comparison
+paths:
+  /healthz:
+    get:
+      operationId: healthCheck
+      tags: [health]
+      summary: Health check
+      responses:
+        "200":
+          description: Healthy
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HealthStatus"
+
+  /player:
+    get:
+      operationId: getPlayer
+      tags: [player]
+      summary: Get player profile
+      responses:
+        "200":
+          description: Player profile
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Player"
+    post:
+      operationId: createPlayer
+      tags: [player]
+      summary: Create new player
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreatePlayerRequest"
+      responses:
+        "201":
+          description: Player created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Player"
+
+  /player/rank-up:
+    post:
+      operationId: rankUp
+      tags: [player]
+      summary: Advance to next political rank
+      responses:
+        "200":
+          description: Rank updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Player"
+
+  /city:
+    get:
+      operationId: getCity
+      tags: [city]
+      summary: Get city state
+      responses:
+        "200":
+          description: City state
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/City"
+
+  /city/build:
+    post:
+      operationId: buildStructure
+      tags: [city]
+      summary: Build a city structure
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/BuildStructureRequest"
+      responses:
+        "200":
+          description: Structure built
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/City"
+
+  /city/upgrade:
+    post:
+      operationId: upgradeStructure
+      tags: [city]
+      summary: Upgrade an existing structure
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpgradeStructureRequest"
+      responses:
+        "200":
+          description: Structure upgraded
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/City"
+
+  /policies:
+    get:
+      operationId: getPolicies
+      tags: [policies]
+      summary: Get all policies
+      responses:
+        "200":
+          description: Policies list
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PoliciesResponse"
+
+  /policies/enact:
+    post:
+      operationId: enactPolicy
+      tags: [policies]
+      summary: Enact or update a policy
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/EnactPolicyRequest"
+      responses:
+        "200":
+          description: Policy enacted
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Policy"
+
+  /economy:
+    get:
+      operationId: getEconomy
+      tags: [economy]
+      summary: Get economy overview
+      responses:
+        "200":
+          description: Economy data
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Economy"
+
+  /economy/collect-taxes:
+    post:
+      operationId: collectTaxes
+      tags: [economy]
+      summary: Collect taxes from citizens
+      responses:
+        "200":
+          description: Taxes collected
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TaxCollectionResult"
+
+  /economy/trade:
+    post:
+      operationId: conductTrade
+      tags: [economy]
+      summary: Conduct a trade with another city/nation
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TradeRequest"
+      responses:
+        "200":
+          description: Trade conducted
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TradeResult"
+
+  /international:
+    get:
+      operationId: getInternationalRelations
+      tags: [international]
+      summary: Get international relations overview
+      responses:
+        "200":
+          description: International relations
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternationalRelations"
+
+  /international/negotiate:
+    post:
+      operationId: negotiate
+      tags: [international]
+      summary: Negotiate with a foreign nation
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/NegotiateRequest"
+      responses:
+        "200":
+          description: Negotiation result
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/NegotiationResult"
+
+  /leaderboard:
+    get:
+      operationId: getLeaderboard
+      tags: [player]
+      summary: Get global leaderboard
+      responses:
+        "200":
+          description: Leaderboard data
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Leaderboard"
+
+  /subscription:
+    get:
+      operationId: getSubscription
+      tags: [subscription]
+      summary: Get subscription status
+      responses:
+        "200":
+          description: Subscription info
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Subscription"
+
+  /subscription/upgrade:
+    post:
+      operationId: upgradeSubscription
+      tags: [subscription]
+      summary: Upgrade to premium subscription
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpgradeSubscriptionRequest"
+      responses:
+        "200":
+          description: Subscription upgraded
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Subscription"
+
+  /game/tick:
+    post:
+      operationId: gameTick
+      tags: [city]
+      summary: Advance game time by one tick
+      responses:
+        "200":
+          description: Game state after tick
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GameTickResult"
+
+  /search/analyze:
+    post:
+      operationId: analyzeProductImage
+      tags: [search]
+      summary: Analyze a product image and return identification + price comparison results
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AnalyzeProductRequest"
+      responses:
+        "200":
+          description: Product analysis and price comparison results
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProductSearchResult"
+
+  /search/text:
+    post:
+      operationId: searchByText
+      tags: [search]
+      summary: Search for products by text query
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TextSearchRequest"
+      responses:
+        "200":
+          description: Price comparison results
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProductSearchResult"
+
+components:
+  schemas:
+    HealthStatus:
+      type: object
+      properties:
+        status:
+          type: string
+      required:
+        - status
+
+    Player:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        rank:
+          type: string
+          enum: [mayor, governor, senator, minister, president, worldLeader]
+        rankTitle:
+          type: string
+        xp:
+          type: number
+        xpToNextRank:
+          type: number
+        influence:
+          type: number
+        approvalRating:
+          type: number
+        createdAt:
+          type: string
+        isPremium:
+          type: boolean
+      required:
+        - id
+        - name
+        - rank
+        - rankTitle
+        - xp
+        - xpToNextRank
+        - influence
+        - approvalRating
+        - createdAt
+        - isPremium
+
+    CreatePlayerRequest:
+      type: object
+      properties:
+        name:
+          type: string
+        cityName:
+          type: string
+      required:
+        - name
+        - cityName
+
+    City:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        population:
+          type: number
+        happiness:
+          type: number
+        pollution:
+          type: number
+        crimeRate:
+          type: number
+        educationLevel:
+          type: number
+        healthcareQuality:
+          type: number
+        infrastructureScore:
+          type: number
+        districts:
+          type: array
+          items:
+            $ref: "#/components/schemas/District"
+        structures:
+          type: array
+          items:
+            $ref: "#/components/schemas/Structure"
+      required:
+        - id
+        - name
+        - population
+        - happiness
+        - pollution
+        - crimeRate
+        - educationLevel
+        - healthcareQuality
+        - infrastructureScore
+        - districts
+        - structures
+
+    District:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        type:
+          type: string
+          enum: [residential, commercial, industrial, government, park]
+        level:
+          type: number
+        population:
+          type: number
+      required:
+        - id
+        - name
+        - type
+        - level
+        - population
+
+    Structure:
+      type: object
+      properties:
+        id:
+          type: string
+        type:
+          type: string
+        name:
+          type: string
+        level:
+          type: number
+        cost:
+          type: number
+        effect:
+          type: string
+      required:
+        - id
+        - type
+        - name
+        - level
+        - cost
+        - effect
+
+    BuildStructureRequest:
+      type: object
+      properties:
+        structureType:
+          type: string
+        districtId:
+          type: string
+      required:
+        - structureType
+        - districtId
+
+    UpgradeStructureRequest:
+      type: object
+      properties:
+        structureId:
+          type: string
+      required:
+        - structureId
+
+    Policy:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        category:
+          type: string
+          enum: [economic, social, environmental, security, international]
+        level:
+          type: number
+        maxLevel:
+          type: number
+        cost:
+          type: number
+        description:
+          type: string
+        effects:
+          type: object
+          additionalProperties:
+            type: number
+        isActive:
+          type: boolean
+        isPremium:
+          type: boolean
+      required:
+        - id
+        - name
+        - category
+        - level
+        - maxLevel
+        - cost
+        - description
+        - effects
+        - isActive
+        - isPremium
+
+    PoliciesResponse:
+      type: object
+      properties:
+        policies:
+          type: array
+          items:
+            $ref: "#/components/schemas/Policy"
+        activePoliciesCount:
+          type: number
+        maxActivePolicies:
+          type: number
+      required:
+        - policies
+        - activePoliciesCount
+        - maxActivePolicies
+
+    EnactPolicyRequest:
+      type: object
+      properties:
+        policyId:
+          type: string
+        level:
+          type: number
+      required:
+        - policyId
+        - level
+
+    Economy:
+      type: object
+      properties:
+        treasury:
+          type: number
+        income:
+          type: number
+        expenses:
+          type: number
+        taxRate:
+          type: number
+        gdp:
+          type: number
+        unemploymentRate:
+          type: number
+        tradeBalance:
+          type: number
+        debt:
+          type: number
+        creditRating:
+          type: string
+        sectors:
+          type: array
+          items:
+            $ref: "#/components/schemas/EconomicSector"
+        history:
+          type: array
+          items:
+            $ref: "#/components/schemas/EconomyHistoryPoint"
+      required:
+        - treasury
+        - income
+        - expenses
+        - taxRate
+        - gdp
+        - unemploymentRate
+        - tradeBalance
+        - debt
+        - creditRating
+        - sectors
+        - history
+
+    EconomicSector:
+      type: object
+      properties:
+        name:
+          type: string
+        value:
+          type: number
+        growth:
+          type: number
+        employees:
+          type: number
+      required:
+        - name
+        - value
+        - growth
+        - employees
+
+    EconomyHistoryPoint:
+      type: object
+      properties:
+        tick:
+          type: number
+        treasury:
+          type: number
+        gdp:
+          type: number
+        happiness:
+          type: number
+      required:
+        - tick
+        - treasury
+        - gdp
+        - happiness
+
+    TaxCollectionResult:
+      type: object
+      properties:
+        collected:
+          type: number
+        newTreasury:
+          type: number
+        citizenHappinessDelta:
+          type: number
+      required:
+        - collected
+        - newTreasury
+        - citizenHappinessDelta
+
+    TradeRequest:
+      type: object
+      properties:
+        nationId:
+          type: string
+        offerAmount:
+          type: number
+        requestAmount:
+          type: number
+        resourceType:
+          type: string
+      required:
+        - nationId
+        - offerAmount
+        - requestAmount
+        - resourceType
+
+    TradeResult:
+      type: object
+      properties:
+        success:
+          type: boolean
+        profit:
+          type: number
+        message:
+          type: string
+        relationshipDelta:
+          type: number
+      required:
+        - success
+        - profit
+        - message
+        - relationshipDelta
+
+    Nation:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        flag:
+          type: string
+        relationship:
+          type: number
+        gdp:
+          type: number
+        militaryPower:
+          type: number
+        tradeVolume:
+          type: number
+        status:
+          type: string
+          enum: [allied, neutral, rival, hostile]
+      required:
+        - id
+        - name
+        - flag
+        - relationship
+        - gdp
+        - militaryPower
+        - tradeVolume
+        - status
+
+    InternationalRelations:
+      type: object
+      properties:
+        nations:
+          type: array
+          items:
+            $ref: "#/components/schemas/Nation"
+        treaties:
+          type: array
+          items:
+            $ref: "#/components/schemas/Treaty"
+        globalInfluence:
+          type: number
+        unSeatHeld:
+          type: boolean
+      required:
+        - nations
+        - treaties
+        - globalInfluence
+        - unSeatHeld
+
+    Treaty:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        nationId:
+          type: string
+        type:
+          type: string
+          enum: [trade, defense, cultural, economic, environmental]
+        benefit:
+          type: string
+        expiresAtTick:
+          type: number
+      required:
+        - id
+        - name
+        - nationId
+        - type
+        - benefit
+        - expiresAtTick
+
+    NegotiateRequest:
+      type: object
+      properties:
+        nationId:
+          type: string
+        proposalType:
+          type: string
+          enum: [trade, defense, cultural, economic, environmental, sanction, aid]
+        terms:
+          type: string
+      required:
+        - nationId
+        - proposalType
+        - terms
+
+    NegotiationResult:
+      type: object
+      properties:
+        accepted:
+          type: boolean
+        message:
+          type: string
+        influenceDelta:
+          type: number
+        relationshipDelta:
+          type: number
+        newTreaty:
+          $ref: "#/components/schemas/Treaty"
+      required:
+        - accepted
+        - message
+        - influenceDelta
+        - relationshipDelta
+
+    LeaderboardEntry:
+      type: object
+      properties:
+        rank:
+          type: number
+        playerName:
+          type: string
+        cityName:
+          type: string
+        politicalRank:
+          type: string
+        influence:
+          type: number
+        population:
+          type: number
+      required:
+        - rank
+        - playerName
+        - cityName
+        - politicalRank
+        - influence
+        - population
+
+    Leaderboard:
+      type: object
+      properties:
+        entries:
+          type: array
+          items:
+            $ref: "#/components/schemas/LeaderboardEntry"
+        playerPosition:
+          type: number
+      required:
+        - entries
+        - playerPosition
+
+    Subscription:
+      type: object
+      properties:
+        tier:
+          type: string
+          enum: [free, premium]
+        features:
+          type: array
+          items:
+            type: string
+        maxWorkspaces:
+          type: number
+        canAutoPlay:
+          type: boolean
+        hasPremiumStrategies:
+          type: boolean
+        showBadge:
+          type: boolean
+        expiresAt:
+          type: string
+      required:
+        - tier
+        - features
+        - maxWorkspaces
+        - canAutoPlay
+        - hasPremiumStrategies
+        - showBadge
+
+    UpgradeSubscriptionRequest:
+      type: object
+      properties:
+        tier:
+          type: string
+          enum: [premium]
+      required:
+        - tier
+
+    GameTickResult:
+      type: object
+      properties:
+        tick:
+          type: number
+        events:
+          type: array
+          items:
+            $ref: "#/components/schemas/GameEvent"
+        economyDelta:
+          type: number
+        populationDelta:
+          type: number
+        happinessDelta:
+          type: number
+        xpGained:
+          type: number
+        influenceDelta:
+          type: number
+      required:
+        - tick
+        - events
+        - economyDelta
+        - populationDelta
+        - happinessDelta
+        - xpGained
+        - influenceDelta
+
+    GameEvent:
+      type: object
+      properties:
+        id:
+          type: string
+        type:
+          type: string
+          enum: [positive, negative, neutral, crisis, opportunity]
+        title:
+          type: string
+        description:
+          type: string
+        impact:
+          type: object
+          additionalProperties:
+            type: number
+      required:
+        - id
+        - type
+        - title
+        - description
+        - impact
+
+    AnalyzeProductRequest:
+      type: object
+      properties:
+        imageBase64:
+          type: string
+          description: Base64-encoded image data
+        language:
+          type: string
+          enum: [en, ar, tr, fr]
+          default: en
+      required:
+        - imageBase64
+
+    TextSearchRequest:
+      type: object
+      properties:
+        query:
+          type: string
+        language:
+          type: string
+          enum: [en, ar, tr, fr]
+          default: en
+      required:
+        - query
+
+    ProductInfo:
+      type: object
+      properties:
+        name:
+          type: string
+        category:
+          type: string
+        description:
+          type: string
+        brand:
+          type: string
+        confidence:
+          type: number
+      required:
+        - name
+        - category
+        - description
+        - confidence
+
+    PriceResult:
+      type: object
+      properties:
+        store:
+          type: string
+        storeLogo:
+          type: string
+        price:
+          type: string
+        currency:
+          type: string
+        url:
+          type: string
+        title:
+          type: string
+        rating:
+          type: number
+        reviewCount:
+          type: number
+        availability:
+          type: string
+        isCheapest:
+          type: boolean
+        shipping:
+          type: string
+      required:
+        - store
+        - storeLogo
+        - price
+        - currency
+        - url
+        - title
+        - availability
+        - isCheapest
+
+    ProductSearchResult:
+      type: object
+      properties:
+        product:
+          $ref: "#/components/schemas/ProductInfo"
+        results:
+          type: array
+          items:
+            $ref: "#/components/schemas/PriceResult"
+        searchQuery:
+          type: string
+        totalResults:
+          type: number
+      required:
+        - product
+        - results
+        - searchQuery
+        - totalResults
